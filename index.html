@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Gaurav Gawade</title>
+    <meta name="description" content="Gaurav Gawade - Consulting Astrophysicist exploring the universe.">
+    <meta name="keywords" content="Astrophysicist, Consulting, Space, Astronomy, Research">
+    <meta name="author" content="Gaurav Gawade">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <!-- External CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header with Responsive Navigation -->
+    <header>
+        <div class="container">
+            <h1><a href="index.html">Gaurav Gawade</a></h1>
+            <input type="checkbox" id="menu-toggle">
+            <label for="menu-toggle" class="menu-icon">&#9776;</label>
+            <nav>
+                <ul class="nav-list">
+                    <li><a href="index.html" class="active">Home</a></li>
+                    <li><a href="about.html">About Me</a></li>
+                    <li><a href="projects.html">Projects</a></li>
+                    <li><a href="blogs.html">Blogs</a></li>
+                    <li><a href="videos.html">Videos</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section with Glassmorphism Effect -->
+        <section class="hero">
+            <div class="hero-content">
+                <img src="your-photo.jpg" alt="Gaurav Gawade" class="hero-image">
+                <div class="hero-text">
+                    <h2>Exploring the Universe, One Star at a Time</h2>
+                    <p>Embark on a journey of cosmic discovery and innovation as we unravel the mysteries of space.</p>
+                    <a href="contact.html" class="hero-button">Get in Touch</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Me Section Summary -->
+        <section class="section glass">
+            <div class="container">
+                <h2>About Me</h2>
+                <p>
+                  I'm Gaurav Gawade, a consulting astrophysicist driven by innovation and the pursuit of knowledge. Discover more about my journey, passion for science, and vision for the future on the <a href="about.html">About Me</a> page.
+                </p>
+            </div>
+        </section>
+
+        <!-- Projects Section Summary -->
+        <section class="section glass">
+            <div class="container">
+                <h2>Projects</h2>
+                <p>
+                  Explore the groundbreaking projects I’m working on—from advanced research on dual AGN systems to innovative astrophysics simulations. <a href="projects.html">View Projects</a>
+                </p>
+            </div>
+        </section>
+
+        <!-- Quotes Carousel with Neon Glow -->
+        <section class="quotes-carousel">
+            <div class="container">
+                <h2 class="section-title">Inspiring Quotes</h2>
+                <div class="quotes-container" id="quotes-container">
+                    <div class="quote active">
+                        <p>"In 900 years of time and space, I've never met someone who wasn't important."</p>
+                        <p class="author">- Doctor Who</p>
+                    </div>
+                    <div class="quote">
+                        <p>"Science is a way of thinking much more than it is a body of knowledge."</p>
+                        <p class="author">- Carl Sagan</p>
+                    </div>
+                    <div class="quote">
+                        <p>"The important thing is not to stop questioning. Curiosity has its own reason for existence."</p>
+                        <p class="author">- Albert Einstein</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Video Section Summary -->
+        <section class="section glass">
+            <div class="container">
+                <h2>Featured Videos</h2>
+                <p>
+                  Watch my latest talks, lectures, and presentations that bring astrophysics to life. <a href="videos.html">Watch Videos</a>
+                </p>
+            </div>
+        </section>
+
+        <!-- Contact Section Summary -->
+        <section class="section glass">
+            <div class="container">
+                <h2>Contact Me</h2>
+                <p>
+                  Have a question or a collaboration idea? I’d love to hear from you.
+                </p>
+                <a href="contact.html" class="hero-button">Get in Touch</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Gaurav Gawade. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Carousel -->
+    <script>
+        // Quote Carousel Script with Smooth Transitions
+        let currentQuoteIndex = 0;
+        const quotes = document.querySelectorAll('.quote');
+        const totalQuotes = quotes.length;
+
+        function showQuote(index) {
+            quotes.forEach((quote, i) => {
+                quote.classList.remove('active');
+                if (i === index) {
+                    quote.classList.add('active');
+                }
+            });
+        }
+
+        function nextQuote() {
+            currentQuoteIndex = (currentQuoteIndex + 1) % totalQuotes;
+            showQuote(currentQuoteIndex);
+        }
+
+        setInterval(nextQuote, 5000);
+    </script>
+</body>
+</html>

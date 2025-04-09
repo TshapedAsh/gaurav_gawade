@@ -1,0 +1,49 @@
+/* blogs.css */
+
+/* Specific styles for the Blogs page */
+.blogs-section {
+    padding: 5rem 0;
+    margin-bottom: 2rem;
+}
+
+.blog-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.blog-post {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 2rem;
+    border-radius: 10px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.blog-post h3 {
+    color: var(--neon-color);
+    margin-bottom: 1rem;
+    text-shadow: 0 0 5px var(--neon-color);
+}
+
+.blog-post p {
+    color: var(--text-color);
+    margin-bottom: 1.5rem;
+}
+
+.blog-post a {
+    color: var(--primary-color);
+    font-weight: bold;
+    border-bottom: 1px solid var(--primary-color);
+    transition: color 0.3s, border-color 0.3s;
+}
+
+.blog-post a:hover {
+    color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.blog-post:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 0 15px var(--neon-color);
+}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master's Thesis - Gaurav Gawade</title>
+    <!-- Google Fonts and CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="projects.css">
+
+<!-- Inline CSS to add gap below the fixed nav -->
+    <style>
+        main {
+            margin-top: 20px; /* <-- Adjust this value to set vertical gap from the nav panel */
+        }
+    </style>
+
+</head>
+<body>
+    <!-- Header with Navigation -->
+    <header>
+        <div class="container">
+            <h1><a href="index.html">Gaurav Gawade</a></h1>
+            <input type="checkbox" id="menu-toggle">
+            <label for="menu-toggle" class="menu-icon">&#9776;</label>
+            <nav>
+                <ul class="nav-list">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About Me</a></li>
+                    <li><a href="projects.html" class="active">Projects</a></li>
+                    <li><a href="blogs.html">Blogs</a></li>
+                    <li><a href="videos.html">Videos</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <section class="project-detail glass">
+            <div class="container">
+                <h2>Master's Thesis</h2>
+                <p>
+                    This master's thesis represents the culmination of my graduate research in astrophysics. It provides an in-depth analysis and discussion of my research work, including theoretical frameworks, observational methodologies, and data-driven insights into Dual Active Galactic Nuclei in high-energy window, mostly focused on X-ray regime. Through rigorous exploration and innovative techniques, the thesis aims to advance our understanding of key astrophysical phenomena.
+                </p>
+                <!-- Embedded PDF for the Master's Thesis -->
+                <h3>Full Thesis Document</h3>
+                <embed src="Masters_Thesis.pdf" type="application/pdf" />
+                <p>
+                    <a href="projects.html">← Back to Projects</a>
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Gaurav Gawade. All rights reserved.</p>
+    </footer>
+</body>
+</html>
