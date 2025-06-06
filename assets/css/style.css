@@ -132,7 +132,7 @@ nav {
     align-items: center;
     justify-content: center;
     height: 100vh;
-    background: url('spacebg.png') no-repeat center center/cover;
+    background: #000;
     background-attachment: fixed;
     position: relative;
     overflow: hidden;
@@ -271,7 +271,7 @@ nav {
 /* Quotes Carousel */
 .quotes-carousel {
     padding: 5rem 0;
-    background: url('spacebg.png') no-repeat center center/cover;
+    background: #000;
     background-attachment: fixed;
     position: relative;
     overflow: hidden;
