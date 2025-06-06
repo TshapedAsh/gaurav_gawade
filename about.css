@@ -1,0 +1,128 @@
+/* about.css */
+
+/* Specific styles for the About Me page */
+.about-section {
+  padding: 5rem 0;
+  margin-bottom: 2rem;
+}
+
+.about-section p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  max-width: 800px;
+  margin: 0 auto 1.5rem auto;
+  color: var(--text-color);
+  text-align: justify;
+}
+
+/* Removed .about-img since the image is no longer needed */
+
+/* Dropdown Recommendation Styles */
+.about-section details {
+  margin: 1.5rem auto;
+  max-width: 800px;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border-left: 3px solid var(--neon-color);
+  transition: background 0.3s ease;
+}
+
+.about-section details:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.about-section summary {
+  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  list-style: none;
+  position: relative;
+  padding-right: 20px;
+  color: var(--neon-color);
+}
+
+.about-section summary::after {
+  content: "►";
+  position: absolute;
+  right: 0;
+  top: 0;
+  transition: transform 0.2s ease;
+  color: var(--neon-color);
+}
+
+.about-section details[open] summary::after {
+  transform: rotate(90deg);
+}
+
+.about-section ul {
+  margin-top: 1rem;
+  padding-left: 1.5rem;
+  list-style: none;
+}
+
+.rec-title {
+  color: var(--neon-color);
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+  margin-bottom: 0.2rem;
+  transition: color 0.2s ease;
+}
+
+.rec-title:hover {
+  color: var(--secondary-color);
+}
+
+.rec-desc {
+  display: block;
+  margin-left: 1rem;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.65);
+  margin-bottom: 1rem;
+}
+
+/* Falling Stars Effect */
+.falling-stars {
+  position: fixed;
+  top: 0;
+  width: 15%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: -1; /* behind the content */
+}
+
+.falling-stars.left {
+  left: 0;
+}
+
+.falling-stars.right {
+  right: 0;
+}
+
+.star {
+  position: absolute;
+  top: -10px;
+  width: 4px;
+  height: 4px;
+  background: #fff;
+  border-radius: 50%;
+  opacity: 1; /* Increased opacity for clear visibility */
+  animation: fall 5s linear infinite;
+}
+
+/* Keyframes for star animation */
+@keyframes fall {
+  0% {
+    top: -10px;
+    opacity: 1;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
