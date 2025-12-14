@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark light" />
+  <title>Connect | Gaurav Gawade</title>
+
+  <!-- Small perf win for your external images -->
+  <link rel="preconnect" href="https://github.com" crossorigin>
+  <link rel="preconnect" href="https://tshapedash.github.io" crossorigin>
+  <link rel="preconnect" href="https://upload.wikimedia.org" crossorigin>
+
+  <style>
+    /* --- GLOBAL SCROLLBAR HIDE --- */
+    html, body {
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE 10+ */
+    }
+    ::-webkit-scrollbar {
+      display: none; /* Chrome/Safari/Webkit */
+      width: 0;
+      height: 0;
+    }
+
+    :root {
+      --bg-color: #050505; /* Deep Space Black */
+      --text-color: #ffffff;
+      --accent-color: #00d2ff; /* Cyan Glow */
+      --nebula-glow: linear-gradient(45deg, #00d2ff, #9b59b6);
+      --card-bg: rgba(255, 255, 255, 0.03);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --thread-color: rgba(255, 255, 255, 0.3);
+      --bulb-bg: rgba(255, 255, 255, 0.1);
+      --bulb-icon: #ffffff;
+
+      /* Modern Cursor (White for Dark Mode) */
+      --cursor-url: url('data:image/svg+xml;utf8,<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 4L22 18L13 19.5L8 28V4Z" fill="white" stroke="black" stroke-width="1.5" stroke-linejoin="round"/></svg>') 4 4, auto;
+      --cursor-pointer-url: url('data:image/svg+xml;utf8,<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.5 6L21 16.5L14 17.5L10.5 24V6Z" fill="%2300d2ff" stroke="white" stroke-width="1.5" stroke-linejoin="round"/></svg>') 4 4, pointer;
+    }
+
+    /* --- 💡 LIGHT MODE VARIABLES --- */
+    body.light-mode {
+      --bg-color: #87CEEB; /* Sky Blue */
+      --text-color: #1a1a1a;
+      --accent-color: #0056b3; /* Deep Blue */
+      --nebula-glow: linear-gradient(45deg, #0056b3, #6f42c1);
+      --card-bg: rgba(255, 255, 255, 0.6);
+      --card-border: rgba(255, 255, 255, 0.4);
+      --thread-color: rgba(0, 0, 0, 0.3);
+      --bulb-bg: rgba(255, 255, 255, 0.5);
+      --bulb-icon: #1a1a1a;
+
+      /* Modern Cursor (Black for Light Mode) */
+      --cursor-url: url('data:image/svg+xml;utf8,<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 4L22 18L13 19.5L8 28V4Z" fill="black" stroke="white" stroke-width="1.5" stroke-linejoin="round"/></svg>') 4 4, auto;
+
+      /* Pointer cursor tuned for light mode */
+      --cursor-pointer-url: url('data:image/svg+xml;utf8,<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.5 6L21 16.5L14 17.5L10.5 24V6Z" fill="%230056b3" stroke="black" stroke-width="1.5" stroke-linejoin="round"/></svg>') 4 4, pointer;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+      cursor: var(--cursor-url);
+      position: relative;
+      transition: background-color 1.5s ease, color 0.5s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Force pointer cursor on interactive elements */
+    :where(a, button, [role="button"], .planet, .straw-hat-container, .theme-switch-wrapper, .link-card, .cloud) {
+      cursor: var(--cursor-pointer-url);
+    }
+
+    /* Focus styles */
+    :where(a, button, [role="button"]):focus-visible {
+      outline: 2px solid var(--accent-color);
+      outline-offset: 4px;
+      border-radius: 14px;
+    }
+
+    /* --- 🏴‍☠️ GEAR 5: NIKA MODE --- */
+    body.nika-mode {
+      animation: gum-gum-gatling 2s infinite cubic-bezier(0.280, 0.840, 0.420, 1);
+      filter: contrast(1.2) saturate(1.2);
+    }
+    body.nika-mode .straw-hat-container { animation: laugh-tale 0.5s infinite; }
+
+    @keyframes gum-gum-gatling {
+      0% { transform: scale(1, 1); }
+      30% { transform: scale(1.15, 0.85); }
+      40% { transform: scale(0.85, 1.15); }
+      50% { transform: scale(1.05, 0.95); }
+      65% { transform: scale(0.98, 1.02); }
+      75% { transform: scale(1.02, 0.98); }
+      100% { transform: scale(1, 1); }
+    }
+    @keyframes laugh-tale {
+      0% { transform: rotate(-25deg) translateY(0); }
+      50% { transform: rotate(-15deg) translateY(-10px); }
+      100% { transform: rotate(-25deg) translateY(0); }
+    }
+
+    /* --- Cursor Trail Canvas (replaces DOM spam particles) --- */
+    #trailCanvas {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      pointer-events: none;
+    }
+
+    /* --- 💡 CHAOTIC RUBBER THREAD SWITCH --- */
+    .theme-switch-wrapper {
+      position: fixed;
+      top: -20px;
+      left: 50px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: transparent;
+      border: 0;
+      padding: 0;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    .thread {
+      width: 4px;
+      height: 120px;
+      background: var(--thread-color);
+      transition: background 0.5s;
+      transform-origin: top center;
+      border-radius: 2px;
+    }
+
+    .bulb-handle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--bulb-bg);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      border: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: transform 0.2s ease, background 0.2s ease;
+      position: relative;
+      top: -2px;
+    }
+
+    .theme-switch-wrapper.active .thread { animation: rubberStretchChaotic 0.8s ease-out; }
+    .theme-switch-wrapper.active .bulb-handle { animation: rubberHandleChaotic 0.8s ease-out; }
+
+    @keyframes rubberStretchChaotic {
+      0% { transform: scaleY(1) rotate(0deg); }
+      30% { transform: scaleY(1.6) translateX(0) rotate(0deg); }
+      40% { transform: scaleY(0.7) translateX(10px) rotate(-5deg); }
+      50% { transform: scaleY(1.2) translateX(-8px) rotate(4deg); }
+      60% { transform: scaleY(0.9) translateX(5px) rotate(-3deg); }
+      70% { transform: scaleY(1.05) translateX(-2px) rotate(1deg); }
+      85% { transform: scaleY(0.98) translateX(1px) rotate(0deg); }
+      100% { transform: scaleY(1) rotate(0deg); }
+    }
+    @keyframes rubberHandleChaotic {
+      0% { transform: translateY(0) rotate(0deg); }
+      30% { transform: translateY(70px) rotate(0deg); }
+      40% { transform: translateY(-30px) rotate(-15deg); }
+      50% { transform: translateY(15px) rotate(10deg); }
+      60% { transform: translateY(-8px) rotate(-5deg); }
+      70% { transform: translateY(4px) rotate(2deg); }
+      100% { transform: translateY(0) rotate(0deg); }
+    }
+
+    .bulb-handle:hover { transform: scale(1.1); background: var(--card-bg); }
+
+    .bulb-icon {
+      width: 18px;
+      height: 18px;
+      fill: var(--bulb-icon);
+      transition: fill 0.5s;
+    }
+
+    /* --- 🌌 Dynamic Background --- */
+    .background-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .stars {
+      width: 100%;
+      height: 100%;
+      background:
+        radial-gradient(1px 1px at 20px 30px, #eee, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 100px 50px, #fff, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 200px 300px, #ddd, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 150px 200px, #fff, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 40px 180px, #fff, rgba(0,0,0,0));
+      background-size: 550px 550px;
+      animation: twinkle 12s linear infinite;
+      opacity: 0.8;
+      transition: filter 1s;
+      will-change: transform;
+    }
+
+    body.light-mode .stars {
+      filter: invert(1) opacity(0.3);
+      transform: rotate(180deg);
+    }
+
+    /* --- ☁️ CLOUDS (Light Mode Only) --- */
+    .cloud {
+      position: absolute;
+      background: #fff;
+      border-radius: 50px;
+      opacity: 0;
+      pointer-events: none; /* ✅ FIX: no click-capture in dark mode */
+      transition: opacity 1s, background 0.3s, filter 0.1s;
+      filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1));
+      z-index: 1;
+    }
+
+    body.light-mode .cloud {
+      opacity: 0.8;
+      pointer-events: auto; /* clickable only in light mode */
+    }
+
+    .cloud.stormy { background: #666; animation-play-state: paused; }
+    .cloud.stormy::after, .cloud.stormy::before { background: #666; }
+    .cloud.flash { filter: brightness(3) drop-shadow(0 0 20px yellow) !important; }
+
+    .cloud::after, .cloud::before {
+      content: '';
+      position: absolute;
+      background: inherit;
+      border-radius: 50%;
+      transition: background 0.3s;
+    }
+
+    .rain-drop {
+      position: absolute;
+      width: 2px;
+      height: 15px;
+      background: #00d2ff;
+      top: 50%;
+      z-index: -1;
+      opacity: 0;
+      animation: rainFall 0.6s linear infinite;
+    }
+
+    @keyframes rainFall {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(120px); opacity: 0; }
+    }
+
+    .cloud-1 { width: 120px; height: 50px; top: 15%; left: -150px; animation: drift 35s linear infinite; }
+    .cloud-1::after { width: 50px; height: 50px; top: -25px; left: 25px; }
+    .cloud-1::before { width: 40px; height: 40px; top: -15px; left: 60px; }
+
+    .cloud-2 { width: 100px; height: 40px; top: 60%; left: -120px; animation: drift 45s linear infinite reverse; animation-delay: -10s; }
+    .cloud-2::after { width: 40px; height: 40px; top: -20px; left: 15px; }
+    .cloud-2::before { width: 30px; height: 30px; top: -10px; left: 50px; }
+
+    .cloud-3 { width: 140px; height: 60px; top: 30%; right: -160px; animation: drift 40s linear infinite; animation-delay: -20s; }
+    .cloud-3::after { width: 60px; height: 60px; top: -30px; left: 20px; }
+    .cloud-3::before { width: 50px; height: 50px; top: -20px; left: 70px; }
+
+    @keyframes drift {
+      from { transform: translateX(-100px); }
+      to { transform: translateX(110vw); }
+    }
+
+    /* --- 🪐 Planets & Objects --- */
+    .planet {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.9;
+      z-index: 10;
+      transition: filter 0.3s ease;
+      pointer-events: auto;
+    }
+    body.light-mode .planet { opacity: 1; }
+
+    /* ✅ FIX: wrapper holds the float transform; inner planet can scale/turn without transform fighting */
+    .planet-1-wrap {
+      position: absolute;
+      top: 5%;
+      right: -40px;
+      width: 180px;
+      height: 180px;
+      z-index: 10;
+      pointer-events: none; /* wrapper itself */
+      animation: floatPlanet 20s infinite ease-in-out;
+      will-change: transform;
+    }
+    .planet-1-wrap.paused { animation-play-state: paused; }
+
+    .planet-1 {
+      position: absolute;
+      inset: 0;
+      width: 180px;
+      height: 180px;
+      pointer-events: auto; /* clickable */
+      background: radial-gradient(circle at 30% 30%, #ff8c42, #8a2be2);
+      box-shadow: 0 0 60px rgba(138, 43, 226, 0.2), inset -20px -20px 50px rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: visible;
+      transition: transform 0.3s ease, filter 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    }
+
+    .planet-1:not(.turning):not(.facing-user):hover {
+      transform: scale(1.1);
+      filter: brightness(1.15);
+    }
+
+    .planet-1.turning { transform: scaleX(0); }
+
+    .planet-1.facing-user {
+      background: radial-gradient(circle at 30% 30%, #ffd700, #ff8c42);
+      box-shadow: 0 0 80px rgba(138, 43, 226, 0.8), inset -10px -10px 30px rgba(0,0,0,0.2);
+    }
+
+    .planet-1.facing-user .planet-face {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    body.light-mode .planet-1 {
+      background: radial-gradient(circle at 40% 40%, #ffeb3b, #fbc02d);
+      box-shadow: 0 0 50px #ffeb3b, 0 0 100px rgba(255, 193, 7, 0.4);
+      transform: scale(1.1);
+    }
+
+    .planet-ring {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 260px;
+      height: 60px;
+      border: 10px solid rgba(255, 255, 255, 0.15);
+      border-top: 2px solid rgba(255, 255, 255, 0.05);
+      border-radius: 50%;
+      transform: translate(-50%, -50%) rotate(-25deg);
+      pointer-events: none;
+      transition: opacity 0.5s;
+    }
+    body.light-mode .planet-ring { opacity: 0; }
+
+    .planet-face {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transform: scale(0.5);
+      transition: opacity 0.2s, transform 0.2s;
+      pointer-events: none;
+    }
+
+    .planet-eye {
+      position: absolute;
+      top: 35%;
+      width: 35px;
+      height: 45px;
+      background: white;
+      border-radius: 50%;
+      border: 3px solid #333;
+      overflow: hidden;
+    }
+    .planet-eye.left { left: 25%; }
+    .planet-eye.right { right: 25%; }
+
+    .planet-pupil {
+      position: absolute;
+      top: 30%;
+      left: 20%;
+      width: 15px;
+      height: 20px;
+      background: #333;
+      border-radius: 50%;
+    }
+    .planet-pupil::after {
+      content: '';
+      position: absolute;
+      top: 20%;
+      right: 20%;
+      width: 6px;
+      height: 6px;
+      background: white;
+      border-radius: 50%;
+    }
+
+    .planet-mouth {
+      position: absolute;
+      bottom: 25%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 20px;
+      border-bottom: 4px solid #333;
+      border-radius: 0 0 20px 20px;
+      background: #ff6b6b;
+    }
+
+    .planet-speech {
+      position: absolute;
+      top: 40px;
+      right: 140px;
+      background: white;
+      color: black;
+      padding: 12px 18px;
+      border-radius: 20px;
+      border-top-right-radius: 2px;
+      font-weight: bold;
+      font-size: 0.9rem;
+      white-space: nowrap;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      opacity: 0;
+      transform: scale(0);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 100;
+      pointer-events: none;
+    }
+    .planet-speech.visible { opacity: 1; transform: scale(1); }
+
+    /* Planet 2 (Quasar/Galaxy) */
+    .planet-2 {
+      width: 300px;
+      height: 300px;
+      background: transparent;
+      bottom: -80px;
+      left: -80px;
+      animation: galaxySpin 60s linear infinite;
+      transform: rotateX(60deg) rotateZ(20deg);
+      opacity: 0.8;
+      pointer-events: auto;
+    }
+
+    body.light-mode .planet-2 {
+      transform: none;
+      animation: none;
+      width: 100%;
+      height: 200px;
+      left: 0;
+      bottom: 50px;
+      background: none;
+      opacity: 1;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M10 50 Q 20 40 30 50 Q 20 60 10 50' fill='rgba(0,0,0,0.5)'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+    }
+
+    .birds-overlay {
+      position: absolute;
+      bottom: 5%;
+      left: 5%;
+      width: 200px;
+      height: 100px;
+      opacity: 0;
+      transition: opacity 1s;
+      pointer-events: none;
+      z-index: -1;
+    }
+    body.light-mode .birds-overlay { opacity: 0.6; }
+
+    .planet-2::before, .planet-2::after, .quasar-jet { transition: opacity 0.5s; }
+    body.light-mode .planet-2::before,
+    body.light-mode .planet-2::after,
+    body.light-mode .quasar-jet { opacity: 0; }
+
+    .planet-2::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: conic-gradient(
+        from 0deg,
+        transparent 0%,
+        rgba(0, 210, 255, 0.1) 10%,
+        var(--accent-color) 20%,
+        rgba(155, 89, 182, 0.8) 25%,
+        transparent 40%,
+        transparent 50%,
+        rgba(0, 210, 255, 0.1) 60%,
+        var(--accent-color) 70%,
+        rgba(155, 89, 182, 0.8) 75%,
+        transparent 90%
+      );
+      filter: blur(10px);
+      box-shadow: 0 0 50px rgba(155, 89, 182, 0.3);
+    }
+
+    .planet-2::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(255, 200, 100, 0.4) 30%, transparent 70%);
+      box-shadow: 0 0 80px 30px rgba(255, 140, 66, 0.2);
+      z-index: 2;
+      filter: blur(5px);
+    }
+
+    .quasar-jet {
+      position: absolute;
+      bottom: -80px;
+      left: 70px;
+      width: 4px;
+      height: 400px;
+      background: linear-gradient(to top, transparent, rgba(255, 255, 255, 0.5), transparent);
+      transform: rotate(-35deg);
+      filter: blur(8px);
+      opacity: 0.4;
+      z-index: -2;
+      pointer-events: none;
+    }
+
+    @keyframes galaxySpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    @keyframes floatPlanet { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+
+    /* Shooting Star Animation */
+    .shooting-star {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      height: 2px;
+      background: linear-gradient(-45deg, #5f91ff, rgba(0, 0, 255, 0));
+      animation: tail 3000ms ease-in-out infinite, shooting 3000ms ease-in-out infinite;
+    }
+    .shooting-star::before, .shooting-star::after {
+      content: '';
+      position: absolute;
+      top: calc(50% - 1px);
+      right: 0;
+      height: 2px;
+      background: linear-gradient(-45deg, rgba(0, 0, 255, 0), #5f91ff, rgba(0, 0, 255, 0));
+      border-radius: 100%;
+      transform: translateX(50%) rotateZ(45deg);
+      animation: shining 3000ms ease-in-out infinite;
+    }
+    .shooting-star::after { transform: translateX(50%) rotateZ(-45deg); }
+    .shooting-star:nth-child(1) { top: 0; left: 20%; animation-delay: 1s; }
+    .shooting-star:nth-child(2) { top: 20%; left: 80%; animation-delay: 3s; }
+    .shooting-star:nth-child(3) { top: 60%; left: -10%; animation-delay: 5s; }
+
+    @keyframes tail { 0% { width: 0; } 30% { width: 100px; } 100% { width: 0; } }
+    @keyframes shooting { 0% { transform: translateX(0) translateY(0) rotate(35deg); } 100% { transform: translateX(300px) translateY(300px) rotate(35deg); } }
+    @keyframes shining { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+    @keyframes twinkle { 0% { transform: translateY(0); } 100% { transform: translateY(-550px); } }
+
+    /* --- 👤 Profile Section --- */
+    .profile-section {
+      margin-top: 50px;
+      text-align: center;
+      animation: fadeIn 1s ease-out;
+      padding: 0 20px;
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 10;
+    }
+
+    .orbit-wrapper {
+      position: relative;
+      width: 140px;
+      height: 140px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .orbit-ring {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 1px dashed var(--accent-color);
+      opacity: 0.5;
+      animation: rotateOrbit 20s linear infinite;
+    }
+
+    .planet-dot {
+      position: absolute;
+      top: 50%;
+      left: -4px;
+      width: 10px;
+      height: 10px;
+      background: var(--accent-color);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--accent-color);
+      transform: translateY(-50%);
+    }
+
+    .avatar {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      border: 3px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+      z-index: 2;
+      overflow: hidden;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+    }
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.1);
+    }
+
+    body.light-mode .avatar {
+      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+      border-color: rgba(0,0,0,0.1);
+    }
+
+    @keyframes rotateOrbit { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+    h1 {
+      font-size: 1.8rem;
+      margin: 5px 0 0;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+    body.light-mode h1 { text-shadow: none; }
+
+    p.tagline {
+      color: #b0b0b0;
+      margin: 5px 0 0;
+      font-size: 0.95rem;
+      font-weight: 300;
+    }
+    body.light-mode p.tagline { color: #555; }
+
+    /* --- 👒 Straw Hat --- */
+    .straw-hat-container {
+      position: absolute;
+      width: 70px;
+      height: 70px;
+      z-index: 100;
+      top: -25px;
+      left: 0px;
+      transform: rotate(-25deg);
+      transition: transform 0.2s ease;
+      border: 0;
+      background: transparent;
+      padding: 0;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .straw-hat-container:hover { transform: rotate(-25deg) scale(1.1); }
+
+    .hat-dome { position: absolute; top: 0; left: 17px; width: 36px; height: 25px; background: #eebb44; border-radius: 20px 20px 0 0; border: 1px solid #cfaa3d; z-index: 2; }
+    .hat-band { position: absolute; top: 17px; left: 16px; width: 38px; height: 8px; background: #cc0000; border-radius: 2px; z-index: 3; }
+    .hat-brim { position: absolute; top: 22px; left: 0; width: 70px; height: 14px; background: #eebb44; border-radius: 50%; border: 1px solid #cfaa3d; z-index: 1; box-shadow: 0 4px 8px rgba(0,0,0,0.6); }
+
+    /* --- 🔗 Links List --- */
+    .links-container {
+      width: 100%;
+      max-width: 680px; /* Increased width from 480px to make buttons longer */
+      padding: 0 20px 50px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+      z-index: 5;
+    }
+
+    .link-card {
+      background: var(--card-bg);
+      color: var(--text-color);
+      text-decoration: none;
+      padding: 16px 24px;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s, border-color 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      font-weight: 600;
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    /* Make buttons look like your link cards */
+    button.link-card {
+      appearance: none;
+      -webkit-appearance: none;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      text-align: left;
+    }
+
+    .link-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--nebula-glow);
+      opacity: 0;
+      z-index: -1;
+      transition: opacity 0.4s ease;
+    }
+
+    .link-card:hover {
+      transform: translateY(-4px) scale(1.01);
+      border-color: transparent;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    }
+    body.light-mode .link-card:hover { box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1); }
+    .link-card:hover::before { opacity: 0.15; }
+
+    .link-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 2px;
+      height: 0%;
+      background: var(--accent-color);
+      transition: height 0.3s ease;
+    }
+    .link-card:hover::after { height: 100%; }
+
+    .icon {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      filter: drop-shadow(0 0 2px rgba(0,0,0,0.3));
+    }
+    body.light-mode .icon { filter: none; }
+
+    .icon-linkedin { fill: #0077b5; }
+    .icon-github { fill: #ffffff; }
+    body.light-mode .icon-github { fill: #333; }
+    .icon-portfolio { fill: #00d2ff; }
+    body.light-mode .icon-portfolio { fill: #0056b3; }
+    .icon-whatsapp { fill: #25D366; }
+    .icon-x { fill: #ffffff; }
+    body.light-mode .icon-x { fill: #000; }
+    .icon-medium { fill: #ffffff; }
+    body.light-mode .icon-medium { fill: #000; }
+    .icon-email { fill: #ffcc00; }
+    body.light-mode .icon-email { fill: #f39c12; }
+
+    .link-text {
+      flex-grow: 1;
+      text-align: center;
+      margin-right: 24px;
+      letter-spacing: 0.3px;
+    }
+
+    footer {
+      margin-top: auto;
+      padding: 20px;
+      color: #666;
+      font-size: 0.75rem;
+      text-align: center;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 10;
+    }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* --- Security dialog (modern replacement for prompt; prompt fallback exists) --- */
+    dialog#securityDialog {
+      border: 1px solid var(--card-border);
+      background: rgba(20, 20, 20, 0.85);
+      color: var(--text-color);
+      border-radius: 14px;
+      padding: 18px;
+      max-width: min(420px, calc(100vw - 40px));
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    body.light-mode dialog#securityDialog {
+      background: rgba(255, 255, 255, 0.8);
+      color: #111;
+    }
+    dialog::backdrop { background: rgba(0,0,0,0.6); }
+    .security-row { display: flex; gap: 10px; align-items: center; margin-top: 12px; }
+    #securityAnswer {
+      flex: 1;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--card-border);
+      background: rgba(0,0,0,0.15);
+      color: inherit;
+      font-size: 1rem;
+    }
+    body.light-mode #securityAnswer { background: rgba(255,255,255,0.8); }
+    .security-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 14px; }
+    .security-actions button {
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
+      color: inherit;
+      font-weight: 650;
+    }
+
+    /* --- Reduced motion: keeps page usable + faster --- */
+    @media (prefers-reduced-motion: reduce) {
+      * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+      .shooting-star { display: none !important; }
+      #trailCanvas { display: none !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Cursor trail canvas (performance upgrade) -->
+  <canvas id="trailCanvas" aria-hidden="true"></canvas>
+
+  <!-- 💡 The Hanging Thread Light Switch (now a real button) -->
+  <button class="theme-switch-wrapper" id="themeSwitch" type="button" aria-label="Toggle theme">
+    <div class="thread"></div>
+    <div class="bulb-handle" aria-hidden="true">
+      <svg class="bulb-icon" id="themeIcon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/>
+      </svg>
+    </div>
+  </button>
+
+  <div class="background-container" aria-hidden="true">
+    <div class="stars"></div>
+
+    <!-- ☁️ CLOUDS -->
+    <div class="cloud cloud-1"></div>
+    <div class="cloud cloud-2"></div>
+    <div class="cloud cloud-3"></div>
+
+    <div class="shooting-star"></div>
+    <div class="shooting-star"></div>
+    <div class="shooting-star"></div>
+
+    <!-- 🪐 Planet 1 (wrapped to fix transform conflicts) -->
+    <div class="planet-1-wrap" id="planet1Wrap">
+      <div class="planet planet-1" id="planet1" role="button" tabindex="0" aria-label="Interactive planet">
+        <div class="planet-ring"></div>
+
+        <div class="planet-face">
+          <div class="planet-eye left"><div class="planet-pupil"></div></div>
+          <div class="planet-eye right"><div class="planet-pupil"></div></div>
+          <div class="planet-mouth"></div>
+        </div>
+
+        <div class="planet-speech" id="planetSpeech">This guy has weird hobbies!</div>
+      </div>
+    </div>
+
+    <div class="planet planet-2"></div>
+
+    <svg class="birds-overlay" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+      <path d="M10 50 Q 20 40 30 50" stroke="#333" stroke-width="2" fill="none" />
+      <path d="M30 50 Q 40 40 50 50" stroke="#333" stroke-width="2" fill="none" />
+      <path d="M60 40 Q 70 30 80 40" stroke="#333" stroke-width="2" fill="none" />
+      <path d="M80 40 Q 90 30 100 40" stroke="#333" stroke-width="2" fill="none" />
+      <path d="M120 70 Q 130 60 140 70" stroke="#333" stroke-width="1.5" fill="none" />
+      <path d="M140 70 Q 150 60 160 70" stroke="#333" stroke-width="1.5" fill="none" />
+    </svg>
+
+    <div class="quasar-jet"></div>
+  </div>
+
+  <main>
+    <section class="profile-section">
+      <div class="orbit-wrapper">
+        <button class="straw-hat-container" id="nikaToggle" type="button" title="Secret Mode?" aria-label="Toggle Gear 5 mode">
+          <div class="hat-dome"></div>
+          <div class="hat-band"></div>
+          <div class="hat-brim"></div>
+        </button>
+
+        <div class="orbit-ring"><div class="planet-dot"></div></div>
+
+        <div class="avatar" aria-label="Gaurav Gawade avatar">
+          <img
+            src="https://github.com/tshapedash.png?v=updated"
+            alt="Gaurav Gawade"
+            width="110"
+            height="110"
+            decoding="async"
+            fetchpriority="high"
+          />
+        </div>
+      </div>
+
+      <h1>Gaurav Gawade</h1>
+      <p class="tagline">Astrophysics (MSc) • Data Science • Code</p>
+    </section>
+
+    <section class="links-container" aria-label="Connect links">
+      <a href="https://tshapedash.github.io/gaurav_gawade/index.html" class="link-card">
+        <svg class="icon icon-portfolio" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <span class="link-text">Personal Website</span>
+      </a>
+
+      <a href="https://www.linkedin.com/in/gaurav-gawade-82660a188/" target="_blank" rel="noopener noreferrer" class="link-card">
+        <svg class="icon icon-linkedin" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+        <span class="link-text">LinkedIn</span>
+      </a>
+
+      <a href="https://github.com/TshapedAsh/" target="_blank" rel="noopener noreferrer" class="link-card">
+        <svg class="icon icon-github" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        <span class="link-text">GitHub</span>
+      </a>
+
+      <a href="https://medium.com/@gauravgawade" target="_blank" rel="noopener noreferrer" class="link-card">
+        <svg class="icon icon-medium" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/></svg>
+        <span class="link-text">Medium</span>
+      </a>
+
+      <a href="https://orcid.org/0009-0002-2177-9941" target="_blank" rel="noopener noreferrer" class="link-card">
+        <svg class="icon" viewBox="0 0 24 24" aria-label="ORCID" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#A6CE39" d="M12 0a12 12 0 1012 12A12.013 12.013 0 0012 0z"/>
+          <path fill="#fff" d="M9.4 6.6a1.2 1.2 0 11-1.2 1.2 1.2 1.2 0 011.2-1.2zm-1 3.1h2v8.7h-2zm3.6 0h3.5c2.9 0 5 1.9 5 4.4s-2.1 4.3-5 4.3H12zm2 1.8v5h1.5c1.8 0 3-1.1 3-2.5s-1.2-2.5-3-2.5z"/>
+        </svg>
+        <span class="link-text">ORCID Profile</span>
+      </a>
+
+      <a href="https://www.upwork.com/freelancers/~01ac3fbe6a523792d3" target="_blank" rel="noopener noreferrer" class="link-card">
+        <img src="./upwork_logo.png" alt="Upwork" class="icon" width="24" height="24" decoding="async">
+        <span class="link-text">Upwork</span>
+      </a>
+
+      <a href="https://www.fiverr.com/s/e6vYxbE" target="_blank" rel="noopener noreferrer" class="link-card">
+        <img src="./fiverr_logo.png" alt="Fiverr" class="icon" width="24" height="24" decoding="async">
+        <span class="link-text">Fiverr</span>
+      </a>
+
+      <a href="https://x.com/sngflyf" target="_blank" rel="noopener noreferrer" class="link-card">
+        <svg class="icon icon-x" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        <span class="link-text">X / Twitter</span>
+      </a>
+
+      <!-- Action cards: WhatsApp + Email (bug-fixed + modern) -->
+      <button type="button" class="link-card" data-reveal="whatsapp" aria-label="Reveal WhatsApp">
+        <svg class="icon icon-whatsapp" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+        <span class="link-text" id="wa-text">WhatsApp</span>
+      </button>
+
+      <button type="button" class="link-card" data-reveal="email" aria-label="Reveal Email">
+        <svg class="icon icon-email" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        <span class="link-text" id="email-text">Email</span>
+      </button>
+
+      <!-- Business Card Link -->
+      <a href="card.html" class="link-card">
+        <svg class="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm6 12H6v-1.4c0-2 4-3.1 6-3.1s6 1.1 6 3.1V19z"/></svg>
+        <span class="link-text">Business Card</span>
+      </a>
+    </section>
+  </main>
+
+  <!-- Modern security dialog (fallback to prompt if unsupported) -->
+  <dialog id="securityDialog">
+    <form id="securityForm" method="dialog">
+      <div id="securityQuestion" style="font-weight:800;"></div>
+
+      <div class="security-row">
+        <input id="securityAnswer" inputmode="numeric" pattern="[0-9]*" autocomplete="off" placeholder="Answer" />
+      </div>
+
+      <div class="security-actions">
+        <button value="cancel" type="submit">Cancel</button>
+        <button value="ok" type="submit">Reveal</button>
+      </div>
+    </form>
+  </dialog>
+
+  <footer>
+    © <span id="year"></span> Gaurav Gawade
+  </footer>
+
+  <script type="module">
+    // --- SVG Paths for Theme Toggle ---
+    const sunPath = "M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z";
+    const moonPath = "M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z";
+
+    const $ = (sel, root = document) => root.querySelector(sel);
+    const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+    const prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
+
+    // Footer year
+    $("#year").textContent = String(new Date().getFullYear());
+
+    // --- Theme handling (modern + persistent) ---
+    const THEME_KEY = "gg_theme";
+    const themeSwitch = $("#themeSwitch");
+    const themeIconPath = $("#themeIcon path");
+
+    function setTheme(isLight, { persist = true } = {}) {
+      document.body.classList.toggle("light-mode", isLight);
+      themeIconPath?.setAttribute("d", isLight ? moonPath : sunPath);
+      if (persist) localStorage.setItem(THEME_KEY, isLight ? "light" : "dark");
+    }
+
+    function animateSwitch() {
+      themeSwitch.classList.remove("active");
+      void themeSwitch.offsetWidth; // reflow to restart animation
+      themeSwitch.classList.add("active");
+      window.setTimeout(() => themeSwitch.classList.remove("active"), 800);
+    }
+
+    function toggleTheme() {
+      animateSwitch();
+      const nextIsLight = !document.body.classList.contains("light-mode");
+      setTheme(nextIsLight, { persist: true });
+    }
+
+    // init theme: saved > system
+    const saved = localStorage.getItem(THEME_KEY);
+    const systemPrefersLight = window.matchMedia?.("(prefers-color-scheme: light)")?.matches ?? false;
+    setTheme(saved ? saved === "light" : systemPrefersLight, { persist: false });
+
+    themeSwitch.addEventListener("click", toggleTheme, { passive: true });
+
+    // --- Clouds: storm trigger (only relevant in light mode) ---
+    function triggerStorm(cloud) {
+      if (!document.body.classList.contains("light-mode")) return;
+      if (cloud.dataset.storming === "1") return;
+
+      cloud.dataset.storming = "1";
+      cloud.classList.add("stormy");
+
+      // Lightning (double flash)
+      const flash = (delay) => {
+        setTimeout(() => {
+          cloud.classList.add("flash");
+          setTimeout(() => cloud.classList.remove("flash"), 180);
+        }, delay);
+      };
+      flash(250);
+      flash(520);
+
+      // Rain
+      const drops = document.createDocumentFragment();
+      const dropCount = 12;
+      for (let i = 0; i < dropCount; i++) {
+        const drop = document.createElement("div");
+        drop.className = "rain-drop";
+        drop.style.left = `${10 + Math.random() * 80}px`;
+        drop.style.animationDelay = `${i * 70}ms`;
+        drops.appendChild(drop);
+      }
+      cloud.appendChild(drops);
+
+      // Cleanup
+      setTimeout(() => {
+        $$(".rain-drop", cloud).forEach(d => d.remove());
+      }, 1400);
+
+      setTimeout(() => {
+        cloud.classList.remove("stormy");
+        delete cloud.dataset.storming;
+      }, 2000);
+    }
+
+    $$(".cloud").forEach((cloud) => {
+      cloud.addEventListener("click", () => triggerStorm(cloud), { passive: true });
+    });
+
+    // --- Gear 5 toggle ---
+    $("#nikaToggle").addEventListener("click", () => {
+      document.body.classList.toggle("nika-mode");
+    }, { passive: true });
+
+    // --- Planet interaction ---
+    const planet = $("#planet1");
+    const planetWrap = $("#planet1Wrap");
+    const planetSpeech = $("#planetSpeech");
+    let isPlanetInteracting = false;
+
+    function runPlanetSequence() {
+      if (isPlanetInteracting) return;
+      isPlanetInteracting = true;
+
+      planet.classList.add("turning");
+
+      setTimeout(() => {
+        planet.classList.remove("turning");
+        planet.classList.add("facing-user");
+        planetWrap.classList.add("paused");
+        planetSpeech.classList.add("visible");
+      }, 300);
+
+      const t1 = setTimeout(() => { planetSpeech.textContent = "Hope this brings a smile!"; }, 5000);
+
+      const t2 = setTimeout(() => {
+        planet.classList.add("turning");
+        planetSpeech.classList.remove("visible");
+
+        setTimeout(() => {
+          planet.classList.remove("facing-user");
+          planet.classList.remove("turning");
+          planetWrap.classList.remove("paused");
+          planetSpeech.textContent = "This guy has weird hobbies!";
+          isPlanetInteracting = false;
+          clearTimeout(t1);
+        }, 300);
+
+      }, 8000);
+
+      // Safety cleanup if needed in future (kept simple for now)
+      void t2;
+    }
+
+    planet.addEventListener("click", runPlanetSequence, { passive: true });
+    planet.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        runPlanetSequence();
+      }
+    });
+
+    // --- Security check (dialog with prompt fallback) ---
+    const securityDialog = $("#securityDialog");
+    const securityQuestion = $("#securityQuestion");
+    const securityAnswer = $("#securityAnswer");
+
+    function randInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function securityCheck() {
+      const a = randInt(1, 5);
+      const b = randInt(1, 5);
+      const correct = a + b;
+
+      // Fallback: prompt
+      if (!securityDialog || typeof securityDialog.showModal !== "function") {
+        const answer = prompt(`Security Check: What is ${a} + ${b}?`);
+        return Promise.resolve(Number.parseInt(answer ?? "", 10) === correct);
+      }
+
+      securityQuestion.textContent = `Security Check: What is ${a} + ${b}?`;
+      securityAnswer.value = "";
+      securityDialog.showModal();
+
+      return new Promise((resolve) => {
+        const onClose = () => {
+          securityDialog.removeEventListener("close", onClose);
+          const ok = securityDialog.returnValue === "ok";
+          resolve(ok && Number.parseInt(securityAnswer.value, 10) === correct);
+        };
+        securityDialog.addEventListener("close", onClose);
+        setTimeout(() => securityAnswer.focus(), 0);
+      });
+    }
+
+    async function revealInfo(type) {
+      const ok = await securityCheck();
+      if (!ok) {
+        alert("Incorrect. Please try again.");
+        return;
+      }
+
+      if (type === "email") {
+        const user = "gauravgawade";
+        const domain = "proton.me";
+        const email = `${user}@${domain}`;
+        $("#email-text").textContent = email;
+
+        // Optional: copy to clipboard (best effort)
+        navigator.clipboard?.writeText(email).catch(() => {});
+
+        window.location.href = `mailto:${email}`;
+        return;
+      }
+
+      if (type === "whatsapp") {
+        const p1 = "93568";
+        const p2 = "76198";
+        const full = `+91-${p1}${p2}`;
+
+        // ✅ FIX: this element now exists
+        $("#wa-text").textContent = full;
+
+        navigator.clipboard?.writeText(full).catch(() => {});
+
+        window.location.href = `https://wa.me/91${p1}${p2}`;
+      }
+    }
+
+    $$("button[data-reveal]").forEach((btn) => {
+      btn.addEventListener("click", () => revealInfo(btn.dataset.reveal), { passive: true });
+    });
+
+    // --- High-performance cursor trail (canvas) ---
+    // (Disabled for reduced motion and non-mouse pointers)
+    if (!prefersReducedMotion) {
+      const canvas = $("#trailCanvas");
+      const ctx = canvas.getContext("2d", { alpha: true });
+
+      let w = 0, h = 0, dpr = 1;
+      const particles = [];
+      const MAX = 180;
+
+      function resize() {
+        dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+        w = Math.floor(window.innerWidth);
+        h = Math.floor(window.innerHeight);
+        canvas.width = Math.floor(w * dpr);
+        canvas.height = Math.floor(h * dpr);
+        canvas.style.width = w + "px";
+        canvas.style.height = h + "px";
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      resize();
+      window.addEventListener("resize", resize, { passive: true });
+
+      let lastSpawn = 0;
+      window.addEventListener("pointermove", (e) => {
+        if (e.pointerType !== "mouse") return;
+        const t = performance.now();
+        if (t - lastSpawn < 12) return; // throttle spawns
+        lastSpawn = t;
+
+        particles.push({
+          x: e.clientX,
+          y: e.clientY,
+          r: 1 + Math.random() * 3,
+          vx: (Math.random() - 0.5) * 0.25,
+          vy: (Math.random() - 0.5) * 0.25,
+          life: 1,
+        });
+
+        if (particles.length > MAX) particles.splice(0, particles.length - MAX);
+      }, { passive: true });
+
+      function tick() {
+        ctx.clearRect(0, 0, w, h);
+
+        for (let i = particles.length - 1; i >= 0; i--) {
+          const p = particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.life -= 0.03;
+
+          if (p.life <= 0) {
+            particles.splice(i, 1);
+            continue;
+          }
+
+          ctx.globalAlpha = Math.max(0, p.life) * 0.6;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = document.body.classList.contains("light-mode") ? "#000" : "#fff";
+          ctx.fill();
+        }
+
+        ctx.globalAlpha = 1;
+        requestAnimationFrame(tick);
+      }
+
+      requestAnimationFrame(tick);
+    }
+  </script>
+</body>
+</html>

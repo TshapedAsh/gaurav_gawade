@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gaurav Gawade | Astro Access</title>
+    
+    <!-- Favicon (Matched to your website) -->
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32x32.png">
+
+    <!-- Sci-Fi Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Sleek Sci-Fi Palette - Deep Navy Tones */
+            --bg-color: #050505;
+            --card-base-dark: #02040a; /* Almost black navy */
+            --card-base-light: #0f1629; /* Deep Navy */
+            
+            --accent-cyan: #00f3ff;
+            --accent-purple: #bc13fe;
+            --text-main: #ffffff;
+            --text-dim: #a0a0a0;
+            
+            --card-width: 600px;
+            --card-height: 344px;
+        }
+
+        body {
+            background-color: #080808;
+            /* Subtle tech grid background */
+            background-image: 
+                linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            font-family: 'Rajdhani', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            perspective: 1500px; /* Deep perspective for the flip */
+            overflow: hidden;
+        }
+
+        /* --- WRAPPER FOR FLOATING ANIMATION --- */
+        /* We separate the float from the flip to avoid CSS transform conflicts */
+        .float-container {
+            animation: floatCard 6s ease-in-out infinite;
+        }
+
+        /* --- THE CARD CONTAINER (HANDLES FLIP) --- */
+        .card-wrapper {
+            width: var(--card-width);
+            height: var(--card-height);
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy flip */
+            cursor: pointer;
+            touch-action: none; /* Prevent scrolling while swiping card */
+        }
+
+        /* THE FLIP ACTION */
+        .card-wrapper.flipped {
+            transform: rotateY(180deg);
+        }
+
+        /* --- METALLIC FACE STYLES --- */
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden; /* Hides the back when facing away */
+            border-radius: 16px;
+            overflow: hidden;
+            
+            /* DEEP NAVY METAL GRADIENT */
+            background: linear-gradient(135deg, 
+                var(--card-base-light) 0%, 
+                var(--card-base-dark) 60%, 
+                #1e2538 100%
+            );
+            
+            /* Metallic Rim/Border */
+            box-shadow: 
+                inset 0 0 0 1px rgba(255,255,255,0.08), /* Inner rim */
+                0 15px 35px rgba(0,0,0,0.6), /* Drop shadow */
+                0 0 30px rgba(0, 243, 255, 0.05); /* Subtle cyber glow */
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 40px;
+            box-sizing: border-box;
+        }
+
+        /* The "Sheen" reflection line */
+        .card-face::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.05),
+                transparent
+            );
+            transform: skewX(-25deg);
+            animation: sheen 6s infinite;
+            pointer-events: none;
+        }
+
+        /* --- FRONT SIDE --- */
+        .card-front {
+            /* Subtle Hex pattern overlay on the metal */
+            background-image: 
+                linear-gradient(135deg, var(--card-base-light) 0%, var(--card-base-dark) 100%),
+                repeating-linear-gradient(45deg, rgba(0,0,0,0.1) 0, rgba(0,0,0,0.1) 1px, transparent 1px, transparent 10px);
+            background-blend-mode: overlay;
+        }
+
+        /* Accent strip on the left */
+        .card-front::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; bottom: 0;
+            width: 6px;
+            background: linear-gradient(to bottom, var(--accent-cyan), var(--accent-purple));
+        }
+
+        .left-col {
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin: 0;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            /* Metallic text fill */
+            background: linear-gradient(to bottom, #fff 40%, #ccc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .titles {
+            font-family: 'Rajdhani', sans-serif;
+            color: var(--accent-cyan);
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-top: 8px;
+            margin-bottom: 25px;
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+            transition: color 0.3s;
+        }
+        
+        .contact-item svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--text-dim);
+            transition: fill 0.3s;
+        }
+
+        /* Avatar Container */
+        .right-col {
+            z-index: 2;
+            position: relative;
+            width: 140px;
+            height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Rotating Tech Ring */
+        .tech-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 1px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            animation: spin 20s linear infinite;
+        }
+        
+        .tech-ring::after {
+            content: '';
+            position: absolute;
+            top: -2px; left: 50%;
+            width: 4px; height: 4px;
+            background: var(--accent-cyan);
+            box-shadow: 0 0 8px var(--accent-cyan);
+            border-radius: 50%;
+        }
+
+        .avatar {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            /* Tighter fit - zoomed to 105% */
+            background-image: url('https://github.com/tshapedash.png');
+            background-size: 105%; 
+            background-position: center;
+            z-index: 2;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            border: 2px solid rgba(255,255,255,0.15);
+        }
+
+        /* --- BACK SIDE --- */
+        .card-back {
+            transform: rotateY(180deg);
+            /* Slightly darker Navy for back */
+            background: #080c17; 
+            
+            /* Scanlines overlay */
+            background-image: linear-gradient(rgba(0,0,0,0) 50%, rgba(0, 0, 0, 0.3) 50%), linear-gradient(90deg, rgba(0,243,255,0.03), rgba(188,19,254,0.03));
+            background-size: 100% 3px, 100% 100%;
+            
+            flex-direction: row;
+            justify-content: center;
+            gap: 30px;
+            
+            /* SUBTLE GAMING BORDER */
+            /* Using box-shadow inset to create a glowing frame */
+            box-shadow: inset 0 0 0 1px rgba(0, 243, 255, 0.3), inset 0 0 20px rgba(188, 19, 254, 0.1);
+        }
+        
+        /* Corner Accents for Back */
+        .card-back::before {
+            content: '';
+            position: absolute;
+            top: 10px; left: 10px; right: 10px; bottom: 10px;
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px;
+            pointer-events: none;
+        }
+
+        .qr-frame {
+            padding: 8px;
+            background: rgba(255,255,255,0.95);
+            border: 2px solid var(--accent-cyan);
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.15);
+        }
+
+        .qr-code {
+            width: 120px;
+            height: 120px;
+            display: block;
+            opacity: 1;
+        }
+
+        .back-info {
+            text-align: left;
+        }
+
+        .back-info h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: #fff;
+            margin: 0 0 5px 0;
+            font-size: 1.4rem;
+            letter-spacing: 1px;
+        }
+
+        .back-info p {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .link-highlight {
+            color: var(--accent-cyan);
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+            text-decoration: none;
+            letter-spacing: 1px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes floatCard { 
+            0%, 100% { transform: translateY(0); } 
+            50% { transform: translateY(-10px); } 
+        }
+        @keyframes sheen {
+            0%, 100% { left: -100%; opacity: 0; }
+            50% { left: 200%; opacity: 0.3; }
+        }
+
+        /* --- CONTROLS UI --- */
+        .controls {
+            margin-top: 40px;
+            display: flex;
+            gap: 20px;
+            z-index: 100;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .btn {
+            background: transparent;
+            color: var(--accent-cyan);
+            border: 1px solid var(--accent-cyan);
+            padding: 12px 24px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn:hover {
+            background: var(--accent-cyan);
+            color: #000;
+            box-shadow: 0 0 15px var(--accent-cyan);
+        }
+        
+        .btn svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+            /* No drop shadow here to keep it crisp like the icon */
+        }
+
+        .instructions {
+            margin-top: 20px;
+            color: #555;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* --- PRINT / SCREENSHOT LAYOUT MODE (VERTICAL PDF STYLE) --- */
+        body.print-mode {
+            /* Clean White Paper Background for Print/PDF */
+            background: #f5f5f5 !important; 
+            background-image: none !important;
+            height: auto;
+            min-height: 100vh;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            overflow-y: auto;
+            
+            /* Ensure colors print exactly as seen */
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        body.print-mode .float-container {
+            animation: none !important;
+        }
+
+        body.print-mode .card-wrapper {
+            /* Reset all 3D transforms & floating */
+            transform: none !important;
+            animation: none !important;
+            width: auto;
+            height: auto;
+            /* Layout: VERTICAL STACK */
+            display: flex;
+            flex-direction: column; 
+            gap: 40px;
+            filter: none !important; 
+            margin-top: 50px;
+            cursor: default;
+        }
+        
+        body.print-mode .card-wrapper:hover {
+            transform: none;
+        }
+
+        body.print-mode .card-face {
+            position: relative;
+            width: 600px;
+            height: 344px;
+            backface-visibility: visible;
+            transform: none !important;
+            /* Clean shadow for the paper look */
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        body.print-mode .controls, 
+        body.print-mode .instructions { display: none; }
+        
+        .back-btn {
+            display: none;
+            position: fixed;
+            top: 20px; left: 20px;
+            background: #222; color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        body.print-mode .back-btn { display: block; }
+
+    </style>
+</head>
+<body>
+
+    <button class="back-btn" onclick="togglePrintMode()">⬅ Back to 3D View</button>
+
+    <div class="float-container">
+        <div class="card-wrapper" id="card" onclick="flipCard()">
+            
+            <!-- FRONT SIDE -->
+            <div class="card-face card-front">
+                <div class="left-col">
+                    <h1 class="name">Gaurav Gawade</h1>
+                    <div class="titles">Astrophysicist • Data Scientist</div>
+                    
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <!-- Email Icon -->
+                            <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                            <span>gauravgawade@proton.me</span>
+                        </div>
+                        <div class="contact-item">
+                            <!-- GitHub Icon -->
+                            <svg viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                            <span>github.com/TshapedAsh</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="right-col">
+                    <div class="tech-ring"></div>
+                    <div class="avatar"></div>
+                </div>
+            </div>
+
+            <!-- BACK SIDE -->
+            <div class="card-face card-back">
+                <div class="qr-frame">
+                    <img 
+                        src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://tshapedash.github.io/gaurav_gawade/connect.html&color=000000&bgcolor=ffffff" 
+                        alt="Scan Code" 
+                        class="qr-code"
+                    >
+                </div>
+                <div class="back-info">
+                    <h3>ACCESS DATA</h3>
+                    <p>Scan to view research,<br>portfolio & contacts.</p>
+                    <div class="link-highlight">tshapedash.github.io</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="controls">
+        <a href="connect.html" class="btn">
+            <!-- Pixel Art Card Icon -->
+            <svg viewBox="0 0 24 24" role="img" aria-hidden="true" focusable="false" style="shape-rendering: crispEdges;">
+                <path d="M4 6h16v12H4z" fill="none" stroke="currentColor" stroke-width="2"/>
+                <path d="M4 9h16" fill="none" stroke="currentColor" stroke-width="2"/>
+                <path d="M7 12h3v3H7z" fill="currentColor"/>
+                <path d="M12 12h6M12 15h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/>
+                <path d="M19 6h1v1h-1z" fill="currentColor"/>
+            </svg>
+            Connect Hub
+        </a>
+        <button class="btn" onclick="togglePrintMode()">🖨️ PRINT MODE</button>
+    </div>
+    
+    <div class="instructions">TAP OR SWIPE TO FLIP</div>
+
+    <script>
+        function togglePrintMode() {
+            document.body.classList.toggle('print-mode');
+        }
+        
+        function flipCard() {
+            if(!document.body.classList.contains('print-mode')) {
+                document.getElementById('card').classList.toggle('flipped');
+            }
+        }
+
+        // --- SWIPE LOGIC ---
+        const card = document.getElementById('card');
+        let touchStartX = 0;
+        let touchStartY = 0;
+
+        card.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+        }, {passive: true});
+
+        card.addEventListener('touchend', (e) => {
+            if(document.body.classList.contains('print-mode')) return;
+
+            const touchEndX = e.changedTouches[0].screenX;
+            const touchEndY = e.changedTouches[0].screenY;
+            
+            const diffX = Math.abs(touchEndX - touchStartX);
+            const diffY = Math.abs(touchEndY - touchStartY);
+
+            // Threshold for swipe (prevent accidental taps being counted as swipes if movement is tiny)
+            if (diffX > 40 || diffY > 40) {
+                flipCard();
+            }
+        }, {passive: true});
+
+    </script>
+</body>
+</html>
