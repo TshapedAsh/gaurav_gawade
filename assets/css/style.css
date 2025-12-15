@@ -486,3 +486,51 @@ footer p {
 .section.glass:last-of-type .container {
     text-align: center;
 }
+
+/* ✅ FIX: Stop navbar links from disappearing on mobile/tablet (collapse earlier) */
+@media (max-width: 1100px) {
+    header .container {
+        flex-wrap: wrap;
+    }
+
+    .menu-icon {
+        display: block;
+    }
+
+    /* Override desktop nav layout */
+    nav {
+        display: block;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.95);
+
+        /* Fully hidden by default */
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        pointer-events: none;
+
+        /* Override the old transform-hide method */
+        transform: none;
+        transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    }
+
+    /* Show menu when toggled */
+    #menu-toggle:checked + .menu-icon + nav {
+        max-height: 80vh;
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .nav-list {
+        flex-direction: column;
+        align-items: center;
+        padding: 0.75rem 0;
+    }
+
+    .nav-list li {
+        margin: 1rem 0;
+    }
+}
