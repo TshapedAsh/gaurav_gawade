@@ -1,21 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Meta Tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home - Gaurav Gawade</title>
     <meta name="description" content="Gaurav Gawade - Consulting Astrophysicist exploring the universe.">
     <meta name="keywords" content="Astrophysicist, Consulting, Space, Astronomy, Research">
     <meta name="author" content="Gaurav Gawade">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
-    <!-- External CSS -->
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32x32.png">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org/",
+      "@type": "Person",
+      "name": "Gaurav Gawade",
+      "jobTitle": "Astrophysicist",
+      "description": "Astrophysicist and Author specializing in Galaxy Evolution and AGN feedback.",
+      "affiliation": {
+        "@type": "Organization",
+        "name": "St. Xavier's College, Mumbai"
+      },
+      "url": "https://tshapedash.github.io/gaurav_gawade/",
+      "sameAs": [
+        "https://orcid.org/0009-0002-2177-9941",
+        "https://www.linkedin.com/in/gaurav-gawade-82660a188",
+        "https://arxiv.org/a/gawade_g_1"
+      ]
+    }
+    </script>
 </head>
 <body>
-    <!-- Header with Responsive Navigation -->
     <header>
         <div class="container">
             <h1><a href="index.html">Gaurav Gawade</a></h1>
@@ -31,20 +47,13 @@
                     <li><a href="connect.html">Connect</a></li>
                     <li><a href="contact.html">Contact</a></li>
 
-                    <!-- NEW: Business card icon link (after Contact) -->
                     <li class="nav-card">
                         <a class="nav-card-link" href="card.html" aria-label="Business Card" title="Business Card">
-                            <!-- Pixel/gaming-style business card icon (inline SVG, uses currentColor) -->
                             <svg class="nav-card-icon" viewBox="0 0 24 24" role="img" aria-hidden="true" focusable="false">
-                                <!-- outer card -->
                                 <path d="M4 6h16v12H4z" fill="none" stroke="currentColor" stroke-width="2" shape-rendering="crispEdges"/>
-                                <!-- top stripe -->
                                 <path d="M4 9h16" fill="none" stroke="currentColor" stroke-width="2" shape-rendering="crispEdges"/>
-                                <!-- avatar block -->
                                 <path d="M7 12h3v3H7z" fill="currentColor" shape-rendering="crispEdges"/>
-                                <!-- name lines -->
                                 <path d="M12 12h6M12 15h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" shape-rendering="crispEdges"/>
-                                <!-- tiny pixel notch -->
                                 <path d="M19 6h1v1h-1z" fill="currentColor" shape-rendering="crispEdges"/>
                             </svg>
                         </a>
@@ -54,9 +63,7 @@
         </div>
     </header>
 
-    <!-- Main Content -->
     <main>
-        <!-- Hero Section with Glassmorphism Effect -->
         <section class="hero">
             <div class="hero-content">
                 <img src="assets/img/your-photo.jpg" alt="Gaurav Gawade" class="hero-image">
@@ -68,7 +75,6 @@
             </div>
         </section>
 
-        <!-- About Me Section Summary -->
         <section class="section glass">
             <div class="container">
                 <h2>About Me</h2>
@@ -78,7 +84,6 @@
             </div>
         </section>
 
-        <!-- Projects Section Summary -->
         <section class="section glass">
             <div class="container">
                 <h2>Projects</h2>
@@ -88,7 +93,6 @@
             </div>
         </section>
 
-        <!-- Quotes Carousel with Neon Glow -->
         <section class="quotes-carousel">
             <div class="container">
                 <h2 class="section-title">Inspiring Quotes</h2>
@@ -109,7 +113,6 @@
             </div>
         </section>
 
-        <!-- Video Section Summary -->
         <section class="section glass">
             <div class="container">
                 <h2>Featured Videos</h2>
@@ -119,7 +122,6 @@
             </div>
         </section>
 
-        <!-- Contact Section Summary -->
         <section class="section glass">
             <div class="container">
                 <h2>Contact Me</h2>
@@ -131,14 +133,12 @@
         </section>
     </main>
 
-    <!-- Footer -->
     <footer>
         <div class="container">
             <p>&copy; 2025 Gaurav Gawade. All rights reserved.</p>
         </div>
     </footer>
 
-    <!-- JavaScript for Carousel -->
     <script>
         // Quote Carousel Script with Smooth Transitions
         let currentQuoteIndex = 0;
